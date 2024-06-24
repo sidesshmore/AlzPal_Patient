@@ -1,3 +1,4 @@
+import 'package:alzpal_patient/BottomNavigation/bottom_nav.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'colors.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: MainBackgroundColor,
           appBarTheme: const AppBarTheme(backgroundColor: MainBackgroundColor)),
-      home: HomeScreen(),
+      home: BottomNav(),
     );
   }
 }
