@@ -1,3 +1,4 @@
+import 'package:alzpal_patient/ClockGame/widget/wrong_popup.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,25 @@ class ClockOption extends StatelessWidget {
   const ClockOption({super.key, required this.optionText});
 
   final String optionText;
+
+  dynamic showPopUp(BuildContext context) => showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'CLOSE',
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ))
+            ],
+            backgroundColor: DarkBlack,
+            content: WrongPopup(),
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +43,9 @@ class ClockOption extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              showPopUp(context);
+            },
             child: Text(
               optionText,
               style: TextStyle(

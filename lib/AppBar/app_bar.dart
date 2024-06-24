@@ -14,6 +14,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return AppBar(
+      foregroundColor: Colors.white,
       title: Text(
         MyAppBarHeading,
         style: TextStyle(

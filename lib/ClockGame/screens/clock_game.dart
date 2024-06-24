@@ -1,6 +1,7 @@
 import 'package:alzpal_patient/AppBar/app_bar.dart';
 import 'package:alzpal_patient/ClockGame/widget/clock_option.dart';
 import 'package:alzpal_patient/ClockGame/widget/clock_question.dart';
+import 'package:alzpal_patient/ClockGame/widget/wrong_popup.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
