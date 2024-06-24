@@ -13,6 +13,7 @@ class _ClockGameState extends State<ClockGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(MyAppBarHeading: 'Clock Game'),
+      body: Column(),
     );
   }
 }

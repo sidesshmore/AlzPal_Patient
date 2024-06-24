@@ -7,7 +7,7 @@ import 'package:alzpal_patient/Home/models/home_model.dart';
 class HomeGameCard extends StatelessWidget {
   final HomeGame game;
 
-  const HomeGameCard({super.key, required this.game});
+  HomeGameCard({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,11 @@ class HomeGameCard extends StatelessWidget {
         InkWell(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ClockGame()));
+              context,
+              MaterialPageRoute(builder: (context) {
+                return game.nextScreen;
+              }),
+            );
           },
           child: Container(
             height: screenHeight * 0.181,
