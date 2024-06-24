@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 15.0),
+            padding: const EdgeInsets.only(right: 14.0),
             child: Icon(
               Icons.sunny,
               size: screenWidth * 0.083,
