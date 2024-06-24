@@ -4,7 +4,7 @@ import 'package:alzpal_patient/CardMatch/screens/card_match.dart';
 import 'package:alzpal_patient/ClockGame/screens/clock_game.dart';
 import 'package:alzpal_patient/FlashCards/screens/flash_card.dart';
 import 'package:alzpal_patient/Home/widgets/home_game_card.dart';
-import 'package:alzpal_patient/Square%20Match/screens/square_tap.dart';
+import 'package:alzpal_patient/Square%20Tap/screens/square_tap.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:alzpal_patient/Home/models/home_model.dart';

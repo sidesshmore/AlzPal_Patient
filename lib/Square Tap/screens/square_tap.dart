@@ -1,6 +1,6 @@
 import 'package:alzpal_patient/AppBar/app_bar.dart';
-import 'package:alzpal_patient/Square%20Match/widgets/square_container.dart';
-import 'package:alzpal_patient/Square%20Match/widgets/square_question.dart';
+import 'package:alzpal_patient/Square%20Tap/widgets/square_container.dart';
+import 'package:alzpal_patient/Square%20Tap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
 
 class SquareTap extends StatefulWidget {
