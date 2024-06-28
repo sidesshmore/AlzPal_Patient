@@ -53,10 +53,19 @@ class _ClockGameState extends State<ClockGame> {
 
     if (isCorrect) {
       Future.delayed(Duration(seconds: 1), () {
-        setState(() {
-          questionIndex++;
-          selectedOption = '';
-        });
+        if (shuffledQuestions.length - 1 == questionIndex) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return HomeScreen();
+            }),
+          );
+        } else {
+          setState(() {
+            questionIndex++;
+            selectedOption = '';
+          });
+        }
       });
     } else {
       HapticFeedback.heavyImpact();

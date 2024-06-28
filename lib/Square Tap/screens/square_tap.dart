@@ -1,4 +1,6 @@
 import 'package:alzpal_patient/AppBar/app_bar.dart';
+import 'package:alzpal_patient/Home/screen/home_screen.dart';
+import 'package:alzpal_patient/Square%20Tap/data/colorData.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_check.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_container.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_question.dart';
@@ -12,6 +14,36 @@ class SquareTap extends StatefulWidget {
 }
 
 class _SquareTapState extends State<SquareTap> {
+  var colorIndex = 0;
+  bool isCorrect = false;
+  bool isSelected = false;
+
+  List shuffledColor = List.of(colorsData);
+
+  List<Color> colors = [
+    Colors.purple,
+    Colors.blue,
+    Colors.yellow,
+    Colors.orange,
+    Colors.red,
+    Colors.indigo,
+    Colors.green
+  ];
+  int currentColorIndex = 0;
+
+  // Function to change the color
+  void changeColor() {
+    setState(() {
+      currentColorIndex = (currentColorIndex + 1) % colors.length;
+    });
+  }
+
+  @override
+  void initState() {
+    shuffledColor.shuffle();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -19,31 +51,65 @@ class _SquareTapState extends State<SquareTap> {
     return Scaffold(
       appBar: const MyAppBar(MyAppBarHeading: 'Square Tap'),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
             SizedBox(
               height: screenHeight * 0.07,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SquareQuestion()],
+              children: [SquareQuestion(color: shuffledColor[colorIndex])],
             ),
             SizedBox(
               height: screenHeight * 0.15,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SquareContainer()],
+              children: [
+                InkWell(
+                    onTap: changeColor,
+                    child: SquareContainer(
+                      color: colors[currentColorIndex],
+                    ))
+              ],
             ),
             SizedBox(
               height: screenHeight * 0.05,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SquareCheck(
-                  optionText: 'CHECK',
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isCorrect = shuffledColor[colorIndex].color ==
+                          colors[currentColorIndex];
+                      isSelected = true;
+                    });
+                    Future.delayed(Duration(seconds: 1), () {
+                      if (isCorrect) {
+                        if (colorIndex == shuffledColor.length-1) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return HomeScreen();
+                            }),
+                          );
+                        }else{
+                        setState(() {
+                          colorIndex++;
+                          isSelected = false;
+                        });
+                        }
+                      }
+                    });
+                  },
+                  child: SquareCheck(
+                    optionText: 'CHECK',
+                    isCorrect: isCorrect,
+                    isSelected: isSelected,
+                  ),
                 )
               ],
             ),

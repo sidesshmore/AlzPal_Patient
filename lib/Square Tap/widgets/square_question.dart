@@ -1,8 +1,10 @@
+import 'package:alzpal_patient/Square%20Tap/model/ColorModel.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class SquareQuestion extends StatelessWidget {
-  const SquareQuestion({super.key});
+  const SquareQuestion({super.key,required this.color});
+  final ColorModel color;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class SquareQuestion extends StatelessWidget {
               Text(
                 'Press the Square until',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: color.color,
                     fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.w600),
               ),
@@ -34,9 +36,9 @@ class SquareQuestion extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'RED',
+                color.colorName,
                 style: TextStyle(
-                    color: Colors.red,
+                    color: color.color,
                     fontSize: screenWidth * 0.08,
                     fontWeight: FontWeight.w600),
               ),
