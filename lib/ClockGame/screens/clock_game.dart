@@ -52,6 +52,7 @@ class _ClockGameState extends State<ClockGame> {
     });
 
     if (isCorrect) {
+      HapticFeedback.lightImpact();
       Future.delayed(Duration(seconds: 1), () {
         if (shuffledQuestions.length - 1 == questionIndex) {
           Navigator.push(

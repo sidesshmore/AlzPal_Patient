@@ -90,6 +90,7 @@ class _SquareTapState extends State<SquareTap> {
                     });
                     
                       if (isCorrect) {
+                          HapticFeedback.lightImpact();
                         Future.delayed(Duration(seconds: 1), () {
                         if (colorIndex == shuffledColor.length-1) {
                           Navigator.push(
