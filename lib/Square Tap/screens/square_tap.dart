@@ -27,8 +27,8 @@ class _SquareTapState extends State<SquareTap> {
     Colors.yellow,
     Colors.orange,
     Colors.red,
-    Colors.indigo,
-    Colors.green
+    Colors.green,
+    Colors.white,
   ];
   int currentColorIndex = 0;
 
@@ -88,34 +88,32 @@ class _SquareTapState extends State<SquareTap> {
                           colors[currentColorIndex];
                       isSelected = true;
                     });
-                    
-                      if (isCorrect) {
-                          HapticFeedback.lightImpact();
-                        Future.delayed(Duration(seconds: 1), () {
-                        if (colorIndex == shuffledColor.length-1) {
+
+                    if (isCorrect) {
+                      HapticFeedback.lightImpact();
+                      Future.delayed(Duration(seconds: 1), () {
+                        if (colorIndex == shuffledColor.length - 1) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) {
                               return HomeScreen();
                             }),
                           );
-                        }else{
+                        } else {
+                          setState(() {
+                            colorIndex++;
+                            isSelected = false;
+                          });
+                        }
+                      });
+                    } else {
+                      HapticFeedback.heavyImpact();
+                      Future.delayed(Duration(seconds: 1), () {
                         setState(() {
-                          colorIndex++;
                           isSelected = false;
                         });
-                        }
-                        });
-                      }else{
-                        HapticFeedback.heavyImpact();
-                        Future.delayed(Duration(seconds: 1),(){
-                          setState(() {
-                          isSelected=false;
-                            
-                          });
-                        });
-                      }
-                    
+                      });
+                    }
                   },
                   child: SquareCheck(
                     optionText: 'CHECK',

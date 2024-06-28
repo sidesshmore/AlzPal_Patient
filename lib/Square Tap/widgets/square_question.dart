@@ -3,7 +3,7 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class SquareQuestion extends StatelessWidget {
-  const SquareQuestion({super.key,required this.color});
+  const SquareQuestion({super.key, required this.color});
   final ColorModel color;
 
   @override
@@ -26,7 +26,7 @@ class SquareQuestion extends StatelessWidget {
               Text(
                 'Press the Square until',
                 style: TextStyle(
-                    color: color.color,
+                    color: Colors.white,
                     fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.w600),
               ),
