@@ -2,7 +2,7 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class WrongPopup extends StatelessWidget {
-  const WrongPopup({super.key,required this.imageUrl,required this.answer});
+  const WrongPopup({super.key, required this.imageUrl, required this.answer});
 
   final String imageUrl;
   final String answer;
@@ -25,9 +25,9 @@ class WrongPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Oops!',
+                'WRONG ANSWER',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.red,
                     fontSize: screenWidth * 0.08,
                     fontWeight: FontWeight.w600),
               ),
@@ -40,7 +40,7 @@ class WrongPopup extends StatelessWidget {
           ),
           RichText(
             text: TextSpan(
-                text: 'It is ',
+                text: 'Answer is ',
                 style: TextStyle(
                     fontSize: screenWidth * 0.1,
                     fontWeight: FontWeight.w600,
