@@ -46,17 +46,9 @@ class _ClockGameState extends State<ClockGame> {
       );
 
 
-  void _selectedOption(String answer,BuildContext context){
+  void _selectedOption(String answer){
     log('triggered');
     log(answer);
-    if(questionIndex+1==questions.length){
-      Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return HomeScreen();
-              }),
-            );
-    }
     if(answer==shuffledQuestions[questionIndex].answer){
       setState(() {
         questionIndex++;
@@ -100,7 +92,7 @@ class _ClockGameState extends State<ClockGame> {
               height: screenHeight * 0.1,
             ),
             InkWell(
-              onTap: (){_selectedOption(choice[0],context);},
+              onTap: (){_selectedOption(choice[0]);},
               child: ClockOption(
                 optionText: choice[0],
               ),
@@ -110,7 +102,7 @@ class _ClockGameState extends State<ClockGame> {
             ),
             InkWell(
               onTap: () {
-                _selectedOption(choice[1],context);
+                _selectedOption(choice[1]);
               },
               child: ClockOption(
                 optionText: choice[1],
