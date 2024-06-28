@@ -1,4 +1,5 @@
 import 'package:alzpal_patient/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,8 +27,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 14.0),
           child: Icon(
-            Icons.sunny,
-            size: screenWidth * 0.083,
+            CupertinoIcons.chart_bar_fill,
+            size: screenWidth * 0.063,
             color: GreenColor,
           ),
         )
