@@ -23,7 +23,7 @@ class ClockOption extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.32, vertical: screenHeight * 0.0085),
+              horizontal: screenWidth * 0.3, vertical: screenHeight * 0.0085),
           decoration: BoxDecoration(
             color: isSelected
                 ? isCorrect
@@ -43,7 +43,7 @@ class ClockOption extends StatelessWidget {
             isSelected ? (isCorrect ? 'CORRECT' : 'WRONG') : optionText,
             style: TextStyle(
                 color: Colors.white,
-                fontSize: screenWidth * 0.06,
+                fontSize: screenWidth * 0.063,
                 fontWeight: FontWeight.w600),
           ),
         ),
