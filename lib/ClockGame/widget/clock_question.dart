@@ -2,7 +2,8 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class ClockQuestion extends StatelessWidget {
-  const ClockQuestion({super.key});
+  const ClockQuestion({super.key,required this.imageUrl});
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class ClockQuestion extends StatelessWidget {
             ],
           ),
           Image.asset(
-            'assets/usedClock.png',
+            imageUrl,
             width: screenWidth * 0.65,
             height: screenHeight * 0.3,
           ),

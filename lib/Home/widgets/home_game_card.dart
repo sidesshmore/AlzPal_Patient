@@ -27,7 +27,7 @@ class HomeGameCard extends StatelessWidget {
             );
           },
           child: Container(
-            height: screenHeight * 0.181,
+            height: screenHeight * 0.197,
             width: screenWidth * 0.9465,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(33),

@@ -2,7 +2,10 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class WrongPopup extends StatelessWidget {
-  const WrongPopup({super.key});
+  const WrongPopup({super.key,required this.imageUrl,required this.answer});
+
+  final String imageUrl;
+  final String answer;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class WrongPopup extends StatelessWidget {
             ],
           ),
           Image.asset(
-            'assets/usedClock.png',
+            imageUrl,
             width: screenWidth * 0.65,
             height: screenHeight * 0.3,
           ),
@@ -44,7 +47,7 @@ class WrongPopup extends StatelessWidget {
                     color: Colors.white),
                 children: [
                   TextSpan(
-                    text: '3:00',
+                    text: answer,
                     style: TextStyle(
                       fontSize: screenWidth * 0.1,
                       fontWeight: FontWeight.w600,

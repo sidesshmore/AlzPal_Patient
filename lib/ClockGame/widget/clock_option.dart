@@ -7,25 +7,6 @@ class ClockOption extends StatelessWidget {
 
   final String optionText;
 
-  dynamic showPopUp(BuildContext context) => showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    'CLOSE',
-                    style: TextStyle(color: Colors.red, fontSize: 20),
-                  ))
-            ],
-            backgroundColor: DarkBlack,
-            content: WrongPopup(),
-          );
-        },
-      );
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -33,19 +14,18 @@ class ClockOption extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: GreenColor),
-              padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.32,
-                  vertical: screenHeight * 0.0085),
-              shape: RoundedRectangleBorder(
+        Container(
+
+            // side: BorderSide(color: GreenColor),
+            padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.32,
+                vertical: screenHeight * 0.0085),
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(10),
+            // ),
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {
-              showPopUp(context);
-            },
+                border: Border.all(color: GreenColor)),
             child: Text(
               optionText,
               style: TextStyle(
