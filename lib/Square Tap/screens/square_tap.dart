@@ -5,6 +5,7 @@ import 'package:alzpal_patient/Square%20Tap/widgets/square_check.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_container.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SquareTap extends StatefulWidget {
   const SquareTap({super.key});
@@ -87,8 +88,9 @@ class _SquareTapState extends State<SquareTap> {
                           colors[currentColorIndex];
                       isSelected = true;
                     });
-                    Future.delayed(Duration(seconds: 1), () {
+                    
                       if (isCorrect) {
+                        Future.delayed(Duration(seconds: 1), () {
                         if (colorIndex == shuffledColor.length-1) {
                           Navigator.push(
                             context,
@@ -102,8 +104,17 @@ class _SquareTapState extends State<SquareTap> {
                           isSelected = false;
                         });
                         }
+                        });
+                      }else{
+                        HapticFeedback.heavyImpact();
+                        Future.delayed(Duration(seconds: 1),(){
+                          setState(() {
+                          isSelected=false;
+                            
+                          });
+                        });
                       }
-                    });
+                    
                   },
                   child: SquareCheck(
                     optionText: 'CHECK',
