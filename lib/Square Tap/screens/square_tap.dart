@@ -1,4 +1,5 @@
 import 'package:alzpal_patient/AppBar/app_bar.dart';
+import 'package:alzpal_patient/Square%20Tap/widgets/square_check.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_container.dart';
 import 'package:alzpal_patient/Square%20Tap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,17 @@ class _SquareTapState extends State<SquareTap> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [SquareContainer()],
+            ),
+            SizedBox(
+              height: screenHeight * 0.05,
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SquareCheck(
+                  optionText: 'CHECK',
+                )
+              ],
             ),
           ],
         ),
