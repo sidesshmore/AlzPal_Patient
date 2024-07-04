@@ -1,4 +1,3 @@
-import 'package:alzpal_patient/ClockGame/widget/wrong_popup.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +42,7 @@ class FlashcardOption extends StatelessWidget {
             isSelected ? (isCorrect ? 'CORRECT' : 'WRONG') : optionText,
             style: TextStyle(
                 color: Colors.white,
-                fontSize: screenWidth * 0.063,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.w600),
           ),
         ),

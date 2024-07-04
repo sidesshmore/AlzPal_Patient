@@ -18,101 +18,98 @@ class FlashCard extends StatefulWidget {
 }
 
 class _FlashCardState extends State<FlashCard> {
-  String? _selectedCardSet='Animals';
-  var questionArray=0;
-  var questionIndex=0;
-  List animalQuestion=List.of(animal_question);
-  List fruitQuestion=List.of(fruit_question);
-  List vegetableQuestion=List.of(vegetable_question);
-  int animalLen=animal_question.length;
-  int fruitLen=fruit_question.length;
-  int vegetableLen=vegetable_question.length;
+  String? _selectedCardSet = 'Animals';
+  var questionArray = 0;
+  var questionIndex = 0;
+  List animalQuestion = List.of(animal_question);
+  List fruitQuestion = List.of(fruit_question);
+  List vegetableQuestion = List.of(vegetable_question);
+  int animalLen = animal_question.length;
+  int fruitLen = fruit_question.length;
+  int vegetableLen = vegetable_question.length;
   List<String> _cardSets = ['Animals', 'Fruits', 'Vegetables'];
+  String selectedOption = '';
+  bool isCorrect = false;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-  final currentQuestion=questionArray==0?animalQuestion[questionIndex]:questionArray==1?fruitQuestion[questionIndex]:vegetableQuestion[questionIndex];
-  List<String> choice = currentQuestion.shuffledAnswers;
+    final currentQuestion = questionArray == 0
+        ? animalQuestion[questionIndex]
+        : questionArray == 1
+            ? fruitQuestion[questionIndex]
+            : vegetableQuestion[questionIndex];
+    List<String> choice = currentQuestion.shuffledAnswers;
 
-  String selectedOption = '';
-  bool isCorrect = false;
-
-   dynamic showPopUp(BuildContext context) => showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    'CLOSE',
-                    style: TextStyle(color: Colors.red, fontSize: 20),
-                  ))
-            ],
-            backgroundColor: DarkBlack,
-            content: WrongPopup(
-                imageUrl: currentQuestion.url,
-                answer: currentQuestion.answer),
-          );
-        },
-      );
+    dynamic showPopUp(BuildContext context) => showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      'CLOSE',
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    ))
+              ],
+              backgroundColor: DarkBlack,
+              content: WrongPopup(
+                  imageUrl: currentQuestion.url,
+                  answer: currentQuestion.answer),
+            );
+          },
+        );
 
     void _selectedOption(String answer) {
-    setState(() {
-      selectedOption = answer;
-      isCorrect = answer == currentQuestion.answer;
-    });
+      setState(() {
+        selectedOption = answer;
+        isCorrect = answer == currentQuestion.answer;
+      });
 
-    if (isCorrect) {
-      HapticFeedback.lightImpact();
+      if (isCorrect) {
+        HapticFeedback.lightImpact();
 
-        if(questionArray==0 && questionIndex==animalLen-1){
-             Navigator.push(
+        if (questionArray == 0 && questionIndex == animalLen - 1) {
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return HomeScreen();
             }),
           );
-        }
-
-       else if(questionArray==1 && questionIndex==fruitLen-1){
-             Navigator.push(
+        } else if (questionArray == 1 && questionIndex == fruitLen - 1) {
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return HomeScreen();
             }),
           );
-        }
-
-        else if(questionArray==2 && questionIndex==vegetableLen-1){
-             Navigator.push(
+        } else if (questionArray == 2 && questionIndex == vegetableLen - 1) {
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return HomeScreen();
             }),
           );
-        }
-        // if (shuffledQuestions.length - 1 == questionIndex) {
-       
-         else {
+        } else {
           setState(() {
             questionIndex++;
             selectedOption = '';
+            isCorrect = false;
           });
         }
-     
-    } else {
-      HapticFeedback.heavyImpact();
-      showPopUp(context).then((_) {
-        setState(() {
-          selectedOption = '';
+      } else {
+        HapticFeedback.heavyImpact();
+        showPopUp(context).then((_) {
+          setState(() {
+            selectedOption = '';
+          });
         });
-      });
+      }
     }
-  }
 
     return Scaffold(
       appBar: MyAppBar(MyAppBarHeading: 'Flash Cards'),
@@ -132,16 +129,23 @@ class _FlashCardState extends State<FlashCard> {
                     dropdownColor: const Color(0xff262626),
                     value: _selectedCardSet,
                     items: _cardSets
-                        .map((patient) => DropdownMenuItem(
-                              value: patient,
-                              child: Text(patient,
+                        .map((set) => DropdownMenuItem(
+                              value: set,
+                              child: Text(set,
                                   style: const TextStyle(color: Colors.white)),
                             ))
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        questionArray=(value=='Animals'?questionArray=0:value=='Fruits'?questionArray=1:questionArray=2);
+                        questionArray = (value == 'Animals'
+                            ? 0
+                            : value == 'Fruits'
+                                ? 1
+                                : 2);
                         _selectedCardSet = value;
+                        questionIndex = 0;
+                        selectedOption = '';
+                        isCorrect = false;
                       });
                     },
                     decoration: InputDecoration(
@@ -162,9 +166,13 @@ class _FlashCardState extends State<FlashCard> {
             SizedBox(
               height: screenHeight * 0.03,
             ),
-             Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [FlashcardQuestion(imageUrl: currentQuestion.url,)],
+              children: [
+                FlashcardQuestion(
+                  imageUrl: currentQuestion.url,
+                )
+              ],
             ),
             SizedBox(
               height: screenHeight * 0.03,
@@ -181,7 +189,7 @@ class _FlashCardState extends State<FlashCard> {
                     child: FlashcardOption(
                       optionText: choice[i],
                       isSelected: choice[i] == selectedOption,
-                      isCorrect: isCorrect,
+                      isCorrect: selectedOption == choice[i] && isCorrect,
                     ),
                   ),
                   if (i < choice.length - 1)
