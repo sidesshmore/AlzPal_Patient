@@ -2,7 +2,9 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class FlashcardQuestion extends StatefulWidget {
-  const FlashcardQuestion({super.key});
+  const FlashcardQuestion({super.key,required this.imageUrl});
+
+  final String imageUrl;
 
   @override
   State<FlashcardQuestion> createState() => _FlashcardQuestionState();
@@ -29,7 +31,7 @@ class _FlashcardQuestionState extends State<FlashcardQuestion> {
               width: screenWidth * 0.7,
               height: screenHeight * 0.3,
               fit: BoxFit.fill,
-              'assets/tomato.jpg',
+              widget.imageUrl,
             ),
           ),
           Row(

@@ -22,7 +22,7 @@ class _ClockGameState extends State<ClockGame> {
   String selectedOption = '';
   bool isCorrect = false;
 
-  List shuffledQuestions = List.of(questions);
+  List shuffledQuestions= List.of(questions);
 
   dynamic showPopUp(BuildContext context) => showDialog(
         context: context,

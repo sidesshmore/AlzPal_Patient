@@ -2,7 +2,10 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
 class WrongPopup extends StatelessWidget {
-  const WrongPopup({super.key});
+  const WrongPopup({super.key,required this.imageUrl,required this.answer});
+
+   final String imageUrl;
+  final String answer;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class WrongPopup extends StatelessWidget {
               width: screenWidth * 0.65,
               height: screenHeight * 0.3,
               fit: BoxFit.fill,
-              'assets/tomato.jpg',
+              imageUrl,
             ),
           ),
           RichText(
@@ -48,7 +51,7 @@ class WrongPopup extends StatelessWidget {
                     color: Colors.white),
                 children: [
                   TextSpan(
-                    text: 'TOMATO',
+                    text: answer,
                     style: TextStyle(
                       fontSize: screenWidth * 0.1,
                       fontWeight: FontWeight.w600,
