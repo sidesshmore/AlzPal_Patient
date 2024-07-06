@@ -37,12 +37,22 @@ class _FlashCardState extends State<FlashCard> {
   int totalQuestionsAttempted = 0;
   List<int> correctResponseTimes = [];
   List<int> incorrectResponseTimes = [];
-  DateTime? startTime;
+  late DateTime questionStartTime;
+  late DateTime sessionStartTime;
 
   @override
   void initState() {
     super.initState();
-    startTime = DateTime.now();
+    questionStartTime = DateTime.now();
+    sessionStartTime = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    DateTime sessionEndTime = DateTime.now();
+    Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
+    log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
   }
 
   @override
@@ -80,77 +90,83 @@ class _FlashCardState extends State<FlashCard> {
 
     void _selectedOption(String answer) {
       setState(() {
+        DateTime currentTime = DateTime.now();
+        int responseTime = currentTime.difference(questionStartTime).inSeconds;
+
         selectedOption = answer;
         isCorrect = answer == currentQuestion.answer;
         totalQuestionsAttempted++;
+
         if (isCorrect) {
           totalQuestionsCorrect++;
+          correctResponseTimes.add(responseTime);
+        } else {
+          incorrectResponseTimes.add(responseTime);
+        }
+
+        // Calculate accuracy
+        double accuracy =
+            (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
+        log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
+
+        // Calculate average response times
+        double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
+            ? correctResponseTimes.reduce((a, b) => a + b) /
+                correctResponseTimes.length
+            : 0.0;
+
+        double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
+            ? incorrectResponseTimes.reduce((a, b) => a + b) /
+                incorrectResponseTimes.length
+            : 0.0;
+
+        log('Average Correct Response Time: ${averageCorrectResponseTime.toStringAsFixed(2)} seconds');
+        log('Average Incorrect Response Time: ${averageIncorrectResponseTime.toStringAsFixed(2)} seconds');
+
+        if (isCorrect) {
+          HapticFeedback.lightImpact();
+
+          if (questionArray == 0 && questionIndex == animalLen - 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          } else if (questionArray == 1 && questionIndex == fruitLen - 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          } else if (questionArray == 2 && questionIndex == vegetableLen - 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          } else {
+            setState(() {
+              questionIndex++;
+              selectedOption = '';
+              isCorrect = false;
+              questionStartTime =
+                  DateTime.now(); // Start time for the next question
+            });
+          }
+        } else {
+          HapticFeedback.heavyImpact();
+          showPopUp(context).then((_) {
+            setState(() {
+              selectedOption = '';
+              questionStartTime =
+                  DateTime.now(); // Start time for the next question
+            });
+          });
         }
       });
-
-      double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
-      log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
-
-      // Calculate response time
-      DateTime currentTime = DateTime.now();
-      int responseTime = currentTime.difference(startTime!).inSeconds;
-
-      if (isCorrect) {
-        correctResponseTimes.add(responseTime);
-        HapticFeedback.lightImpact();
-
-        if (questionArray == 0 && questionIndex == animalLen - 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return HomeScreen();
-            }),
-          );
-        } else if (questionArray == 1 && questionIndex == fruitLen - 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return HomeScreen();
-            }),
-          );
-        } else if (questionArray == 2 && questionIndex == vegetableLen - 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return HomeScreen();
-            }),
-          );
-        } else {
-          setState(() {
-            questionIndex++;
-            selectedOption = '';
-            isCorrect = false;
-            startTime = DateTime.now(); // Reset start time for next question
-          });
-        }
-      } else {
-        incorrectResponseTimes.add(responseTime);
-        HapticFeedback.heavyImpact();
-        showPopUp(context).then((_) {
-          setState(() {
-            selectedOption = '';
-          });
-        });
-      }
-
-      // Calculate and log response times
-      double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
-          ? correctResponseTimes.reduce((a, b) => a + b) /
-              correctResponseTimes.length
-          : 0.0;
-
-      double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
-          ? incorrectResponseTimes.reduce((a, b) => a + b) /
-              incorrectResponseTimes.length
-          : 0.0;
-
-      log('Average Correct Response Time: ${averageCorrectResponseTime.toStringAsFixed(2)} seconds');
-      log('Average Incorrect Response Time: ${averageIncorrectResponseTime.toStringAsFixed(2)} seconds');
     }
 
     return Scaffold(
@@ -192,7 +208,7 @@ class _FlashCardState extends State<FlashCard> {
                         totalQuestionsAttempted = 0;
                         correctResponseTimes.clear();
                         incorrectResponseTimes.clear();
-                        startTime = DateTime.now();
+                        questionStartTime = DateTime.now();
                       });
                     },
                     decoration: InputDecoration(
