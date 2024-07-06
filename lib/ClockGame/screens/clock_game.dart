@@ -28,6 +28,7 @@ class _ClockGameState extends State<ClockGame> {
   List<double> correctResponseTimes = [];
   List<double> incorrectResponseTimes = [];
   late DateTime questionStartTime;
+  late DateTime sessionStartTime;
 
   List shuffledQuestions = List.of(questions);
 
@@ -101,7 +102,8 @@ class _ClockGameState extends State<ClockGame> {
             setState(() {
               questionIndex++;
               selectedOption = '';
-              questionStartTime = DateTime.now();
+              questionStartTime =
+                  DateTime.now(); // Start time for the next question
             });
           }
         });
@@ -110,7 +112,8 @@ class _ClockGameState extends State<ClockGame> {
         showPopUp(context).then((_) {
           setState(() {
             selectedOption = '';
-            questionStartTime = DateTime.now();
+            questionStartTime =
+                DateTime.now(); // Start time for the next question
           });
         });
       }
@@ -121,7 +124,18 @@ class _ClockGameState extends State<ClockGame> {
   void initState() {
     super.initState();
     shuffledQuestions.shuffle();
-    questionStartTime = DateTime.now();
+    questionStartTime = DateTime.now(); // Initial start time
+    sessionStartTime = DateTime.now(); // Record session start time
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    DateTime sessionEndTime = DateTime.now();
+    Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
+
+    // Session duration
+    log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
   }
 
   @override
