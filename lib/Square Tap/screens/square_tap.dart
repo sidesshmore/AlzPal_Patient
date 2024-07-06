@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alzpal_patient/AppBar/app_bar.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/Square%20Tap/data/colorData.dart';
@@ -18,6 +20,8 @@ class _SquareTapState extends State<SquareTap> {
   var colorIndex = 0;
   bool isCorrect = false;
   bool isSelected = false;
+  late DateTime sessionStartTime;
+  late DateTime sessionEndTime;
 
   List shuffledColor = List.of(colorsData);
 
@@ -41,8 +45,17 @@ class _SquareTapState extends State<SquareTap> {
 
   @override
   void initState() {
-    shuffledColor.shuffle();
     super.initState();
+    sessionStartTime = DateTime.now(); // Record session start time
+    shuffledColor.shuffle();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    sessionEndTime = DateTime.now();
+    Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
+    log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
   }
 
   @override
@@ -69,10 +82,11 @@ class _SquareTapState extends State<SquareTap> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
-                    onTap: changeColor,
-                    child: SquareContainer(
-                      color: colors[currentColorIndex],
-                    ))
+                  onTap: changeColor,
+                  child: SquareContainer(
+                    color: colors[currentColorIndex],
+                  ),
+                ),
               ],
             ),
             SizedBox(
@@ -120,7 +134,7 @@ class _SquareTapState extends State<SquareTap> {
                     isCorrect: isCorrect,
                     isSelected: isSelected,
                   ),
-                )
+                ),
               ],
             ),
           ],
