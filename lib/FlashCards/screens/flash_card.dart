@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:alzpal_patient/AppBar/app_bar.dart';
 import 'package:alzpal_patient/FlashCards/data/animal_questions.dart';
 import 'package:alzpal_patient/FlashCards/data/fruit_question.dart';
@@ -7,8 +11,6 @@ import 'package:alzpal_patient/FlashCards/widget/flashcard_question.dart';
 import 'package:alzpal_patient/FlashCards/widget/wrong_popup.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class FlashCard extends StatefulWidget {
   const FlashCard({super.key});
@@ -30,6 +32,8 @@ class _FlashCardState extends State<FlashCard> {
   List<String> _cardSets = ['Animals', 'Fruits', 'Vegetables'];
   String selectedOption = '';
   bool isCorrect = false;
+  int totalQuestionsCorrect = 0;
+  int totalQuestionsAttempted = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,14 @@ class _FlashCardState extends State<FlashCard> {
       setState(() {
         selectedOption = answer;
         isCorrect = answer == currentQuestion.answer;
+        totalQuestionsAttempted++;
+        if (isCorrect) {
+          totalQuestionsCorrect++;
+        }
       });
+
+      double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
+      log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
 
       if (isCorrect) {
         HapticFeedback.lightImpact();
@@ -146,6 +157,8 @@ class _FlashCardState extends State<FlashCard> {
                         questionIndex = 0;
                         selectedOption = '';
                         isCorrect = false;
+                        totalQuestionsCorrect = 0;
+                        totalQuestionsAttempted = 0;
                       });
                     },
                     decoration: InputDecoration(
