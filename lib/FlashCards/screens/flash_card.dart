@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -34,6 +35,15 @@ class _FlashCardState extends State<FlashCard> {
   bool isCorrect = false;
   int totalQuestionsCorrect = 0;
   int totalQuestionsAttempted = 0;
+  List<int> correctResponseTimes = [];
+  List<int> incorrectResponseTimes = [];
+  DateTime? startTime;
+
+  @override
+  void initState() {
+    super.initState();
+    startTime = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +91,12 @@ class _FlashCardState extends State<FlashCard> {
       double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
       log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
 
+      // Calculate response time
+      DateTime currentTime = DateTime.now();
+      int responseTime = currentTime.difference(startTime!).inSeconds;
+
       if (isCorrect) {
+        correctResponseTimes.add(responseTime);
         HapticFeedback.lightImpact();
 
         if (questionArray == 0 && questionIndex == animalLen - 1) {
@@ -110,9 +125,11 @@ class _FlashCardState extends State<FlashCard> {
             questionIndex++;
             selectedOption = '';
             isCorrect = false;
+            startTime = DateTime.now(); // Reset start time for next question
           });
         }
       } else {
+        incorrectResponseTimes.add(responseTime);
         HapticFeedback.heavyImpact();
         showPopUp(context).then((_) {
           setState(() {
@@ -120,6 +137,20 @@ class _FlashCardState extends State<FlashCard> {
           });
         });
       }
+
+      // Calculate and log response times
+      double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
+          ? correctResponseTimes.reduce((a, b) => a + b) /
+              correctResponseTimes.length
+          : 0.0;
+
+      double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
+          ? incorrectResponseTimes.reduce((a, b) => a + b) /
+              incorrectResponseTimes.length
+          : 0.0;
+
+      log('Average Correct Response Time: ${averageCorrectResponseTime.toStringAsFixed(2)} seconds');
+      log('Average Incorrect Response Time: ${averageIncorrectResponseTime.toStringAsFixed(2)} seconds');
     }
 
     return Scaffold(
@@ -159,6 +190,9 @@ class _FlashCardState extends State<FlashCard> {
                         isCorrect = false;
                         totalQuestionsCorrect = 0;
                         totalQuestionsAttempted = 0;
+                        correctResponseTimes.clear();
+                        incorrectResponseTimes.clear();
+                        startTime = DateTime.now();
                       });
                     },
                     decoration: InputDecoration(
