@@ -22,10 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
         imagePath: 'assets/Clock.png',
         title: 'Clock\nGame',
         nextScreen: ClockGame()),
-    HomeGame(
-        imagePath: 'assets/Card_Total.png',
-        title: 'Card\nMatch',
-        nextScreen: CardMatch()),
+    // HomeGame(
+    //     imagePath: 'assets/Card_Total.png',
+    //     title: 'Card\nMatch',
+    //     nextScreen: CardMatch()),
     HomeGame(
         imagePath: 'assets/Square.png',
         title: 'Square\nTap',
