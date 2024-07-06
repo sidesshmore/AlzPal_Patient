@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:alzpal_patient/AppBar/app_bar.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
-import 'package:alzpal_patient/Square%20Tap/data/colorData.dart';
-import 'package:alzpal_patient/Square%20Tap/widgets/square_check.dart';
-import 'package:alzpal_patient/Square%20Tap/widgets/square_container.dart';
-import 'package:alzpal_patient/Square%20Tap/widgets/square_question.dart';
+import 'package:alzpal_patient/SquareTap/data/colorData.dart';
+import 'package:alzpal_patient/SquareTap/widgets/square_check.dart';
+import 'package:alzpal_patient/SquareTap/widgets/square_container.dart';
+import 'package:alzpal_patient/SquareTap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

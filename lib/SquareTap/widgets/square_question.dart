@@ -1,4 +1,4 @@
-import 'package:alzpal_patient/Square%20Tap/model/ColorModel.dart';
+import 'package:alzpal_patient/SquareTap/model/ColorModel.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 
