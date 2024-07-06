@@ -1,3 +1,4 @@
+//clock_game.dart
 import 'dart:developer';
 
 import 'package:alzpal_patient/AppBar/app_bar.dart';
@@ -24,6 +25,10 @@ class _ClockGameState extends State<ClockGame> {
   int totalQuestionsAttempted = 0;
   int totalQuestionsCorrect = 0;
 
+  List<double> correctResponseTimes = [];
+  List<double> incorrectResponseTimes = [];
+  late DateTime questionStartTime;
+
   List shuffledQuestions = List.of(questions);
 
   dynamic showPopUp(BuildContext context) => showDialog(
@@ -49,17 +54,38 @@ class _ClockGameState extends State<ClockGame> {
 
   void _selectedOption(String answer) {
     setState(() {
+      DateTime questionEndTime = DateTime.now();
+      double responseTime =
+          questionEndTime.difference(questionStartTime).inMilliseconds / 1000.0;
+
       selectedOption = answer;
       isCorrect = answer == shuffledQuestions[questionIndex].answer;
       totalQuestionsAttempted++;
 
       if (isCorrect) {
         totalQuestionsCorrect++;
+        correctResponseTimes.add(responseTime);
+      } else {
+        incorrectResponseTimes.add(responseTime);
       }
 
       // Calculate accuracy
       double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
       log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
+
+      // Calculate average response times
+      double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
+          ? correctResponseTimes.reduce((a, b) => a + b) /
+              correctResponseTimes.length
+          : 0.0;
+
+      double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
+          ? incorrectResponseTimes.reduce((a, b) => a + b) /
+              incorrectResponseTimes.length
+          : 0.0;
+
+      log('Average Correct Response Time: ${averageCorrectResponseTime.toStringAsFixed(2)} seconds');
+      log('Average Incorrect Response Time: ${averageIncorrectResponseTime.toStringAsFixed(2)} seconds');
 
       if (isCorrect) {
         HapticFeedback.lightImpact();
@@ -75,6 +101,7 @@ class _ClockGameState extends State<ClockGame> {
             setState(() {
               questionIndex++;
               selectedOption = '';
+              questionStartTime = DateTime.now();
             });
           }
         });
@@ -83,6 +110,7 @@ class _ClockGameState extends State<ClockGame> {
         showPopUp(context).then((_) {
           setState(() {
             selectedOption = '';
+            questionStartTime = DateTime.now();
           });
         });
       }
@@ -90,9 +118,10 @@ class _ClockGameState extends State<ClockGame> {
   }
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     shuffledQuestions.shuffle();
+    questionStartTime = DateTime.now();
   }
 
   @override
