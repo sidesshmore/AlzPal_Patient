@@ -22,6 +22,10 @@ class _SquareTapState extends State<SquareTap> {
   bool isSelected = false;
   late DateTime sessionStartTime;
   late DateTime sessionEndTime;
+  late DateTime questionStartTime;
+  late DateTime questionEndTime;
+  List<double> correctResponseTimes = [];
+  List<double> incorrectResponseTimes = [];
 
   List shuffledColor = List.of(colorsData);
 
@@ -48,6 +52,7 @@ class _SquareTapState extends State<SquareTap> {
     super.initState();
     sessionStartTime = DateTime.now(); // Record session start time
     shuffledColor.shuffle();
+    questionStartTime = DateTime.now(); // Start time for the first question
   }
 
   @override
@@ -56,6 +61,66 @@ class _SquareTapState extends State<SquareTap> {
     sessionEndTime = DateTime.now();
     Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
     log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
+
+    // Calculate and log average response times
+    double avgCorrectResponseTime =
+        calculateAverageResponseTime(correctResponseTimes);
+    double avgIncorrectResponseTime =
+        calculateAverageResponseTime(incorrectResponseTimes);
+    log('Average Time to Answer Correctly: ${avgCorrectResponseTime.toStringAsFixed(2)} seconds');
+    log('Average Time to Answer Incorrectly: ${avgIncorrectResponseTime.toStringAsFixed(2)} seconds');
+  }
+
+  // Function to handle answering a question
+  void answerQuestion(bool correct) {
+    setState(() {
+      questionEndTime = DateTime.now();
+      double responseTime =
+          questionEndTime.difference(questionStartTime).inMilliseconds / 1000.0;
+
+      if (correct) {
+        correctResponseTimes.add(responseTime);
+      } else {
+        incorrectResponseTimes.add(responseTime);
+      }
+
+      // Proceed to next question or finish game logic here
+      if (correct) {
+        HapticFeedback.lightImpact();
+        Future.delayed(Duration(seconds: 1), () {
+          if (colorIndex == shuffledColor.length - 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          } else {
+            setState(() {
+              colorIndex++;
+              isSelected = false;
+              questionStartTime =
+                  DateTime.now(); // Start time for the next question
+            });
+          }
+        });
+      } else {
+        HapticFeedback.heavyImpact();
+        Future.delayed(Duration(seconds: 1), () {
+          setState(() {
+            isSelected = false;
+            questionStartTime =
+                DateTime.now(); // Start time for the next question
+          });
+        });
+      }
+    });
+  }
+
+  // Function to calculate average response time
+  double calculateAverageResponseTime(List<double> responseTimes) {
+    if (responseTimes.isEmpty) return 0.0;
+    return responseTimes.reduce((a, b) => a + b) / responseTimes.length;
   }
 
   @override
@@ -103,31 +168,8 @@ class _SquareTapState extends State<SquareTap> {
                       isSelected = true;
                     });
 
-                    if (isCorrect) {
-                      HapticFeedback.lightImpact();
-                      Future.delayed(Duration(seconds: 1), () {
-                        if (colorIndex == shuffledColor.length - 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return HomeScreen();
-                            }),
-                          );
-                        } else {
-                          setState(() {
-                            colorIndex++;
-                            isSelected = false;
-                          });
-                        }
-                      });
-                    } else {
-                      HapticFeedback.heavyImpact();
-                      Future.delayed(Duration(seconds: 1), () {
-                        setState(() {
-                          isSelected = false;
-                        });
-                      });
-                    }
+                    // Call answerQuestion function with correct parameter
+                    answerQuestion(isCorrect);
                   },
                   child: SquareCheck(
                     optionText: 'CHECK',
