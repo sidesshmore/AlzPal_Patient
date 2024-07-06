@@ -21,8 +21,10 @@ class _ClockGameState extends State<ClockGame> {
   var questionIndex = 0;
   String selectedOption = '';
   bool isCorrect = false;
+  int totalQuestionsAttempted = 0;
+  int totalQuestionsCorrect = 0;
 
-  List shuffledQuestions= List.of(questions);
+  List shuffledQuestions = List.of(questions);
 
   dynamic showPopUp(BuildContext context) => showDialog(
         context: context,
@@ -49,33 +51,42 @@ class _ClockGameState extends State<ClockGame> {
     setState(() {
       selectedOption = answer;
       isCorrect = answer == shuffledQuestions[questionIndex].answer;
-    });
+      totalQuestionsAttempted++;
 
-    if (isCorrect) {
-      HapticFeedback.lightImpact();
-      Future.delayed(Duration(seconds: 1), () {
-        if (shuffledQuestions.length - 1 == questionIndex) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return HomeScreen();
-            }),
-          );
-        } else {
+      if (isCorrect) {
+        totalQuestionsCorrect++;
+      }
+
+      // Calculate accuracy
+      double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
+      log('Current Accuracy: ${accuracy.toStringAsFixed(2)}%');
+
+      if (isCorrect) {
+        HapticFeedback.lightImpact();
+        Future.delayed(Duration(seconds: 1), () {
+          if (shuffledQuestions.length - 1 == questionIndex) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          } else {
+            setState(() {
+              questionIndex++;
+              selectedOption = '';
+            });
+          }
+        });
+      } else {
+        HapticFeedback.heavyImpact();
+        showPopUp(context).then((_) {
           setState(() {
-            questionIndex++;
             selectedOption = '';
           });
-        }
-      });
-    } else {
-      HapticFeedback.heavyImpact();
-      showPopUp(context).then((_) {
-        setState(() {
-          selectedOption = '';
         });
-      });
-    }
+      }
+    });
   }
 
   @override
