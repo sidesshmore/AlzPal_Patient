@@ -27,8 +27,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 14.0),
           child: Icon(
-            CupertinoIcons.chart_bar_fill,
-            size: screenWidth * 0.063,
+            CupertinoIcons.person_solid,
+            size: screenWidth * 0.07,
             color: GreenColor,
           ),
         )
