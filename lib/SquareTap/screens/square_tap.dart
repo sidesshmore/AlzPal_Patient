@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:alzpal_patient/AppBar/app_bar.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/SquareTap/data/colorData.dart';
@@ -8,6 +7,7 @@ import 'package:alzpal_patient/SquareTap/widgets/square_container.dart';
 import 'package:alzpal_patient/SquareTap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 class SquareTap extends StatefulWidget {
   const SquareTap({super.key});
@@ -27,6 +27,8 @@ class _SquareTapState extends State<SquareTap> {
   List<double> correctResponseTimes = [];
   List<double> incorrectResponseTimes = [];
 
+  final _mySquareTap = Hive.box('square_tap');
+
   List shuffledColor = List.of(colorsData);
 
   List<Color> colors = [
@@ -40,7 +42,6 @@ class _SquareTapState extends State<SquareTap> {
   ];
   int currentColorIndex = 0;
 
-  // Function to change the color
   void changeColor() {
     setState(() {
       currentColorIndex = (currentColorIndex + 1) % colors.length;
@@ -56,7 +57,7 @@ class _SquareTapState extends State<SquareTap> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     sessionEndTime = DateTime.now();
     Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
@@ -69,6 +70,21 @@ class _SquareTapState extends State<SquareTap> {
         calculateAverageResponseTime(incorrectResponseTimes);
     log('Average Time to Answer Correctly: ${avgCorrectResponseTime.toStringAsFixed(2)} seconds');
     log('Average Time to Answer Incorrectly: ${avgIncorrectResponseTime.toStringAsFixed(2)} seconds');
+
+    // Store session data with DateTime as the key
+    await _mySquareTap.put(
+      sessionStartTime.toString(),
+      {
+        'sessionDuration': sessionDuration.inSeconds,
+        'avgCorrectResponseTime': avgCorrectResponseTime,
+        'avgIncorrectResponseTime': avgIncorrectResponseTime,
+      },
+    );
+
+    // Remove invalid entries
+    removeInvalidEntries();
+
+    printStoredValues();
   }
 
   // Function to handle answering a question
@@ -117,10 +133,35 @@ class _SquareTapState extends State<SquareTap> {
     });
   }
 
-  // Function to calculate average response time
   double calculateAverageResponseTime(List<double> responseTimes) {
     if (responseTimes.isEmpty) return 0.0;
     return responseTimes.reduce((a, b) => a + b) / responseTimes.length;
+  }
+
+  // Function to remove invalid entries
+  void removeInvalidEntries() async {
+    List<dynamic> keysToRemove = [];
+    for (var key in _mySquareTap.keys) {
+      var value = _mySquareTap.get(key);
+      if (key is! String || value is! Map) {
+        keysToRemove.add(key);
+      }
+    }
+    for (var key in keysToRemove) {
+      await _mySquareTap.delete(key);
+    }
+  }
+
+  void printStoredValues() async {
+    for (var key in _mySquareTap.keys) {
+      var value = _mySquareTap.get(key);
+      if (value is Map &&
+          value.containsKey('sessionDuration') &&
+          value.containsKey('avgCorrectResponseTime') &&
+          value.containsKey('avgIncorrectResponseTime')) {
+        log('DateTime: $key, Data: $value');
+      }
+    }
   }
 
   @override
@@ -168,7 +209,6 @@ class _SquareTapState extends State<SquareTap> {
                       isSelected = true;
                     });
 
-                    // Call answerQuestion function with correct parameter
                     answerQuestion(isCorrect);
                   },
                   child: SquareCheck(

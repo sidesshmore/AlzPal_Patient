@@ -1,9 +1,14 @@
 import 'package:alzpal_patient/BottomNavigation/bottom_nav.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'colors.dart';
+import 'package:hive/hive.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+
+  var box = await Hive.openBox('square_tap');
   runApp(const MyApp());
 }
 
