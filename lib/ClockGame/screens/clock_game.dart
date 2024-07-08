@@ -1,4 +1,3 @@
-//clock_game.dart
 import 'dart:developer';
 
 import 'package:alzpal_patient/AppBar/app_bar.dart';
@@ -10,6 +9,7 @@ import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 class ClockGame extends StatefulWidget {
   const ClockGame({super.key});
@@ -31,6 +31,7 @@ class _ClockGameState extends State<ClockGame> {
   late DateTime sessionStartTime;
 
   List shuffledQuestions = List.of(questions);
+  final _myClockGame = Hive.box('clock_game');
 
   dynamic showPopUp(BuildContext context) => showDialog(
         context: context,
@@ -129,13 +130,54 @@ class _ClockGameState extends State<ClockGame> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     DateTime sessionEndTime = DateTime.now();
     Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
 
-    // Session duration
+    // Calculate accuracy
+    double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
+
+    // Calculate average response times
+    double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
+        ? correctResponseTimes.reduce((a, b) => a + b) /
+            correctResponseTimes.length
+        : 0.0;
+
+    double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
+        ? incorrectResponseTimes.reduce((a, b) => a + b) /
+            incorrectResponseTimes.length
+        : 0.0;
+
+    // Store session data with DateTime as the key
+    await _myClockGame.put(
+      sessionStartTime.toString(), // Use DateTime as a unique key
+      {
+        'sessionDuration': sessionDuration.inSeconds,
+        'accuracy': accuracy,
+        'avgCorrectResponseTime': averageCorrectResponseTime,
+        'avgIncorrectResponseTime': averageIncorrectResponseTime,
+      },
+    );
+
+    printStoredValues();
+
+    // Session duration log
     log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
+  }
+
+  // Function to print stored values
+  void printStoredValues() async {
+    for (var key in _myClockGame.keys) {
+      var value = _myClockGame.get(key);
+      if (value is Map &&
+          value.containsKey('sessionDuration') &&
+          value.containsKey('accuracy') &&
+          value.containsKey('avgCorrectResponseTime') &&
+          value.containsKey('avgIncorrectResponseTime')) {
+        print('DateTime: $key, Data: $value');
+      }
+    }
   }
 
   @override

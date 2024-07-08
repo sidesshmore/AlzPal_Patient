@@ -8,7 +8,9 @@ import 'package:hive/hive.dart';
 void main() async {
   await Hive.initFlutter();
 
-  var box = await Hive.openBox('square_tap');
+  var box1 = await Hive.openBox('square_tap');
+  var box2 = await Hive.openBox('clock_game');
+
   runApp(const MyApp());
 }
 
