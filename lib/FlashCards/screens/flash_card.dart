@@ -12,6 +12,7 @@ import 'package:alzpal_patient/FlashCards/widget/flashcard_question.dart';
 import 'package:alzpal_patient/FlashCards/widget/wrong_popup.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
+import 'package:hive/hive.dart';
 
 class FlashCard extends StatefulWidget {
   const FlashCard({super.key});
@@ -39,6 +40,7 @@ class _FlashCardState extends State<FlashCard> {
   List<int> incorrectResponseTimes = [];
   late DateTime questionStartTime;
   late DateTime sessionStartTime;
+  final _myFlashCard = Hive.box('flash_card');
 
   @override
   void initState() {
@@ -48,11 +50,55 @@ class _FlashCardState extends State<FlashCard> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     DateTime sessionEndTime = DateTime.now();
     Duration sessionDuration = sessionEndTime.difference(sessionStartTime);
+
+    // Calculate accuracy
+    double accuracy = (totalQuestionsCorrect / totalQuestionsAttempted) * 100;
+
+    // Calculate average response times
+    double averageCorrectResponseTime = correctResponseTimes.isNotEmpty
+        ? correctResponseTimes.reduce((a, b) => a + b) /
+            correctResponseTimes.length
+        : 0.0;
+
+    double averageIncorrectResponseTime = incorrectResponseTimes.isNotEmpty
+        ? incorrectResponseTimes.reduce((a, b) => a + b) /
+            incorrectResponseTimes.length
+        : 0.0;
+
+    // Store session data with DateTime as the key
+    await _myFlashCard.put(
+      sessionStartTime.toString(), // Use DateTime as a unique key
+      {
+        'sessionDuration': sessionDuration.inSeconds,
+        'accuracy': accuracy,
+        'avgCorrectResponseTime': averageCorrectResponseTime,
+        'avgIncorrectResponseTime': averageIncorrectResponseTime,
+      },
+    );
+
+    // Print stored values to check functionality
+    printStoredValues();
+
+    // Session duration log
     log('Session Duration: ${sessionDuration.inMinutes} minutes and ${sessionDuration.inSeconds % 60} seconds');
+  }
+
+  void printStoredValues() async {
+    // Print each valid stored session
+    for (var key in _myFlashCard.keys) {
+      var value = _myFlashCard.get(key);
+      if (value is Map &&
+          value.containsKey('sessionDuration') &&
+          value.containsKey('accuracy') &&
+          value.containsKey('avgCorrectResponseTime') &&
+          value.containsKey('avgIncorrectResponseTime')) {
+        print('DateTime: $key, Data: $value');
+      }
+    }
   }
 
   @override

@@ -10,6 +10,7 @@ void main() async {
 
   var box1 = await Hive.openBox('square_tap');
   var box2 = await Hive.openBox('clock_game');
+  var box3 = await Hive.openBox('flash_card');
 
   runApp(const MyApp());
 }
