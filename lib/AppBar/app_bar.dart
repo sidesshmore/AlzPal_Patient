@@ -1,3 +1,5 @@
+
+import 'package:alzpal_patient/Profile/ui/profileScreen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +26,17 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: GreenColor),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 14.0),
-          child: Icon(
-            CupertinoIcons.person_solid,
-            size: screenWidth * 0.07,
-            color: GreenColor,
+        InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 14.0),
+            child: Icon(
+              CupertinoIcons.person_solid,
+              size: screenWidth * 0.07,
+              color: GreenColor,
+            ),
           ),
         )
       ],

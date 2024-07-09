@@ -682,7 +682,7 @@ ClockQuestion(
   answer: '12:25',
   options: [
     '12:25',
-    '06:25'
+    '08:30'
   ]
 ),
 ClockQuestion(
