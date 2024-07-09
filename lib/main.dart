@@ -23,15 +23,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final user = Hive.box('user');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'LATEST VERSION - 9/7/24',
       theme: ThemeData(
           scaffoldBackgroundColor: MainBackgroundColor,
           appBarTheme: const AppBarTheme(backgroundColor: MainBackgroundColor)),
-      home:  user.get('name')==null?OnboardingScreen():HomeScreen(),
+      home: user.get('name') == null ? OnboardingScreen() : HomeScreen(),
     );
   }
 }
