@@ -38,6 +38,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   syncfusion_flutter_charts: ^26.1.41
+  supabase_flutter: ^2.5.7
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:

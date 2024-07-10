@@ -13,6 +13,7 @@ import 'package:alzpal_patient/FlashCards/widget/wrong_popup.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:hive/hive.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FlashCard extends StatefulWidget {
   const FlashCard({super.key});
@@ -41,6 +42,8 @@ class _FlashCardState extends State<FlashCard> {
   late DateTime questionStartTime;
   late DateTime sessionStartTime;
   final _myFlashCard = Hive.box('flash_card');
+  final _userBox = Hive.box('user');
+  final supabase = Supabase.instance.client;
 
   @override
   void initState() {
@@ -69,16 +72,35 @@ class _FlashCardState extends State<FlashCard> {
             incorrectResponseTimes.length
         : 0.0;
 
-    // Store session data with DateTime as the key
     await _myFlashCard.put(
-      sessionStartTime.toString(), // Use DateTime as a unique key
+      sessionStartTime.toString(),
       {
+        'gameName': 'flashCard',
         'sessionDuration': sessionDuration.inSeconds,
         'accuracy': accuracy,
         'avgCorrectResponseTime': averageCorrectResponseTime,
         'avgIncorrectResponseTime': averageIncorrectResponseTime,
       },
     );
+
+    // Store session data in Supabase
+    final userId = _userBox.get('id');
+    final userName = _userBox.get('name');
+    final response = await supabase.from('GameMetrics').insert({
+      'uuid': userId,
+      'userName': userName,
+      'gameName': 'flashCard',
+      'sessionDuration': sessionDuration.inSeconds,
+      'accuracy': accuracy,
+      'avgCorrectResponseTime': averageCorrectResponseTime,
+      'avgIncorrectResponseTime': averageIncorrectResponseTime,
+    });
+
+    if (response.error != null) {
+      log('Error storing data in Supabase: ${response.error!.message}');
+    } else {
+      log('Data stored successfully in Supabase');
+    }
 
     // Print stored values to check functionality
     printStoredValues();
