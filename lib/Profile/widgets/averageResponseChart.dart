@@ -12,6 +12,34 @@ class AverageResponseChart extends StatefulWidget {
 }
 
 class _AverageResponseChartState extends State<AverageResponseChart> {
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState() {
+    _tooltipBehavior = TooltipBehavior(
+      header: '',
+      enable: true,
+      borderWidth: 5,
+      color: Colors.white,
+      textStyle: TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
+      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+          int seriesIndex) {
+        return Container(
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: Text(
+            '${seriesIndex == 0 ? data.y.toString().split('.').first : data.y1.toString().split('.').first}',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -20,7 +48,7 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
     final List<AverageResponseChartModel> chartData = widget.chartData;
 
     return Container(
-      height: screenHeight * 0.29,
+      height: screenHeight * 0.31,
       width: screenWidth * 0.91,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(33), color: DarkBlack),
@@ -39,8 +67,38 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
             ),
           ),
           Container(
-              height: screenHeight * 0.15,
+              height: screenHeight * 0.20,
               child: SfCartesianChart(
+                  legend: Legend(
+                    isVisible: true,
+                    legendItemBuilder: (String name, dynamic series,
+                        dynamic point, int index) {
+                      Color color;
+                      String text;
+                      if (name == 'y') {
+                        color = Colors.blue;
+                        text = 'Correct Response';
+                      } else {
+                        color = Colors.purple;
+                        text = 'Wrong Response';
+                      }
+                      return Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            color: series.color,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            text,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  tooltipBehavior: _tooltipBehavior,
                   plotAreaBorderWidth: 0,
                   primaryXAxis: CategoryAxis(
                     labelStyle: TextStyle(color: Colors.transparent),
@@ -48,12 +106,17 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                   ),
                   series: <CartesianSeries>[
                     ColumnSeries<AverageResponseChartModel, String>(
+                      color: Colors.blue,
+                        name: 'y',
+                        enableTooltip: true,
                         dataSource: chartData,
                         xValueMapper: (AverageResponseChartModel data, _) =>
                             data.x.toString(),
                         yValueMapper: (AverageResponseChartModel data, _) =>
                             data.y),
                     ColumnSeries<AverageResponseChartModel, String>(
+                      color:Colors.purple,
+                        name: 'y1',
                         dataSource: chartData,
                         xValueMapper: (AverageResponseChartModel data, _) =>
                             data.x.toString(),
