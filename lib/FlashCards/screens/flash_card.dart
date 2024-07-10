@@ -75,7 +75,6 @@ class _FlashCardState extends State<FlashCard> {
     await _myFlashCard.put(
       sessionStartTime.toString(),
       {
-        'gameName': 'flashCard',
         'sessionDuration': sessionDuration.inSeconds,
         'accuracy': accuracy,
         'avgCorrectResponseTime': averageCorrectResponseTime,

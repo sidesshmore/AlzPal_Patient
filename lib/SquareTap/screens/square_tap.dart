@@ -78,7 +78,6 @@ class _SquareTapState extends State<SquareTap> {
     await _mySquareTap.put(
       sessionStartTime.toString(),
       {
-        'gameName': 'squareTap',
         'sessionDuration': sessionDuration.inSeconds,
         'avgCorrectResponseTime': avgCorrectResponseTime,
         'avgIncorrectResponseTime': avgIncorrectResponseTime,

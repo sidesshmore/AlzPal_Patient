@@ -156,7 +156,6 @@ class _ClockGameState extends State<ClockGame> {
     await _myClockGame.put(
       sessionStartTime.toString(),
       {
-        'gameName': 'clockGame',
         'sessionDuration': sessionDuration.inSeconds,
         'accuracy': accuracy,
         'avgCorrectResponseTime': averageCorrectResponseTime,
