@@ -13,13 +13,41 @@ class Sessionchart extends StatefulWidget {
 }
 
 class _SessionchartState extends State<Sessionchart> {
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState() {
+     _tooltipBehavior = TooltipBehavior(
+      header: '',
+      enable: true,
+      borderWidth: 5,
+      color: Colors.white,
+      textStyle: TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
+      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+          int seriesIndex) {
+        return Container(
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: Text(
+            '${data.y.toString().split('.').first}',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final List<SessionchartModel> chartData = widget.chartData;
     return Container(
-      height: screenHeight * 0.29,
+      height: screenHeight * 0.31,
       width: screenWidth * 0.91,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(33), color: DarkBlack),
@@ -38,12 +66,35 @@ class _SessionchartState extends State<Sessionchart> {
             ),
           ),
           Container(
-            height: screenHeight * 0.15,
+            height: screenHeight * 0.20,
             child: SfCartesianChart(
+              tooltipBehavior: _tooltipBehavior,
+              legend: Legend(
+                    isVisible: true,
+                    legendItemBuilder: (String name, dynamic series,
+                        dynamic point, int index) {
+                      return Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'Session Time',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
               series: <CartesianSeries>[
                 // Renders column chart
-
+                
                 ColumnSeries<SessionchartModel, String>(
+                  enableTooltip: true,
+                  name: 'x',
                     dataSource: chartData,
                     xValueMapper: (SessionchartModel data, _) =>
                         data.x.toString(),
