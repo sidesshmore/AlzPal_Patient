@@ -48,26 +48,27 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
     final List<AverageResponseChartModel> chartData = widget.chartData;
 
     return Container(
-      height: screenHeight * 0.31,
+      height: screenHeight * 0.34,
       width: screenWidth * 0.91,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(33), color: DarkBlack),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Response Time',
-                  style: TextStyle(color: GreenColor, fontSize: 19),
+                  'Response Time (in seconds)',
+                  style: TextStyle(
+                      color: GreenColor, fontSize: screenWidth * 0.042),
                 ),
               ],
             ),
           ),
           Container(
-              height: screenHeight * 0.20,
+              height: screenHeight * 0.2,
               child: SfCartesianChart(
                   legend: Legend(
                     isVisible: true,
@@ -77,10 +78,10 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                       String text;
                       if (name == 'y') {
                         color = Colors.blue;
-                        text = 'Correct Response';
+                        text = 'Avg time for\nCorrect Response';
                       } else {
                         color = Colors.purple;
-                        text = 'Wrong Response';
+                        text = 'Avg time for\nWrong Response';
                       }
                       return Row(
                         children: [
@@ -92,7 +93,9 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                           SizedBox(width: 5),
                           Text(
                             text,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screenWidth * 0.03),
                           ),
                         ],
                       );
@@ -100,13 +103,13 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                   ),
                   tooltipBehavior: _tooltipBehavior,
                   plotAreaBorderWidth: 0,
-                  primaryXAxis: CategoryAxis(
+                  primaryXAxis: const CategoryAxis(
                     labelStyle: TextStyle(color: Colors.transparent),
                     majorGridLines: MajorGridLines(width: 0),
                   ),
                   series: <CartesianSeries>[
                     ColumnSeries<AverageResponseChartModel, String>(
-                      color: Colors.blue,
+                        color: Colors.blue,
                         name: 'y',
                         enableTooltip: true,
                         dataSource: chartData,
@@ -115,7 +118,7 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                         yValueMapper: (AverageResponseChartModel data, _) =>
                             data.y),
                     ColumnSeries<AverageResponseChartModel, String>(
-                      color:Colors.purple,
+                        color: Colors.purple,
                         name: 'y1',
                         dataSource: chartData,
                         xValueMapper: (AverageResponseChartModel data, _) =>

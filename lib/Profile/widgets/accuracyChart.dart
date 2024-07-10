@@ -25,7 +25,7 @@ class _AccuracyChartState extends State<AccuracyChart> {
       borderWidth: 5,
       color: Colors.white,
       textStyle: TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
-       builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
           int seriesIndex) {
         return Container(
           padding: EdgeInsets.all(8.0),
@@ -34,7 +34,7 @@ class _AccuracyChartState extends State<AccuracyChart> {
             borderRadius: BorderRadius.circular(4.0),
           ),
           child: Text(
-            '${seriesIndex == 0 ? data.accuracy.toString().split('.').first : data.accuracy.toString().split('.').first }',
+            '${seriesIndex == 0 ? data.accuracy.toString().split('.').first : data.accuracy.toString().split('.').first}',
             style: TextStyle(color: Colors.white),
           ),
         );
@@ -63,8 +63,9 @@ class _AccuracyChartState extends State<AccuracyChart> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Accuracy',
-                  style: TextStyle(color: GreenColor, fontSize: 19),
+                  'Accuracy (in %)',
+                  style: TextStyle(
+                      color: GreenColor, fontSize: screenWidth * 0.042),
                 ),
               ],
             ),
