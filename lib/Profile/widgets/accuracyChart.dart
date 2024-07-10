@@ -25,6 +25,20 @@ class _AccuracyChartState extends State<AccuracyChart> {
       borderWidth: 5,
       color: Colors.white,
       textStyle: TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
+       builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+          int seriesIndex) {
+        return Container(
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: Text(
+            '${seriesIndex == 0 ? data.accuracy.toString().split('.').first : data.accuracy.toString().split('.').first }',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
     );
     super.initState();
   }
