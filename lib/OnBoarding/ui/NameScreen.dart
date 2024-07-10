@@ -2,6 +2,8 @@ import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NameScreen extends StatefulWidget {
   const NameScreen({super.key});
@@ -13,6 +15,8 @@ class NameScreen extends StatefulWidget {
 class _NameScreenState extends State<NameScreen> {
   final _namecontroller = TextEditingController();
   final user = Hive.box('user');
+  final supabase = Supabase.instance.client;
+  final uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,18 @@ class _NameScreenState extends State<NameScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  await user.put('name', _namecontroller.text);
+                  final userName = _namecontroller.text;
+                  final userId = uuid.v4();
+
+                  // Save to Hive
+                  await user.put('name', userName);
+                  await user.put('id', userId);
+
+                  // Save to Supabase
+                  final response = await supabase
+                      .from('UserTable')
+                      .insert({'id': userId, 'name': userName});
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -84,7 +99,7 @@ class _NameScreenState extends State<NameScreen> {
                     borderRadius: BorderRadius.circular(10),
                     color: GreenColor,
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Next',

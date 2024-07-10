@@ -8,6 +8,7 @@ import 'package:alzpal_patient/SquareTap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SquareTap extends StatefulWidget {
   const SquareTap({super.key});
@@ -28,6 +29,8 @@ class _SquareTapState extends State<SquareTap> {
   List<double> incorrectResponseTimes = [];
 
   final _mySquareTap = Hive.box('square_tap');
+  final _userBox = Hive.box('user');
+  final supabase = Supabase.instance.client;
 
   List shuffledColor = List.of(colorsData);
 
@@ -81,6 +84,24 @@ class _SquareTapState extends State<SquareTap> {
         'avgIncorrectResponseTime': avgIncorrectResponseTime,
       },
     );
+
+    // Store session data in Supabase
+    final userId = _userBox.get('id');
+    final userName = _userBox.get('name');
+    final response = await supabase.from('GameMetrics').insert({
+      'uuid': userId,
+      'userName': userName,
+      'gameName': 'squareTap',
+      'sessionDuration': sessionDuration.inSeconds,
+      'avgCorrectResponseTime': avgCorrectResponseTime,
+      'avgIncorrectResponseTime': avgIncorrectResponseTime,
+    });
+
+    if (response.error != null) {
+      log('Error storing data in Supabase: ${response.error!.message}');
+    } else {
+      log('Data stored successfully in Supabase');
+    }
 
     // Remove invalid entries
     removeInvalidEntries();

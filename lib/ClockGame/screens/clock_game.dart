@@ -10,6 +10,7 @@ import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ClockGame extends StatefulWidget {
   const ClockGame({super.key});
@@ -32,6 +33,8 @@ class _ClockGameState extends State<ClockGame> {
 
   List shuffledQuestions = List.of(questions);
   final _myClockGame = Hive.box('clock_game');
+  final _userBox = Hive.box('user');
+  final supabase = Supabase.instance.client;
 
   dynamic showPopUp(BuildContext context) => showDialog(
         context: context,
@@ -149,9 +152,9 @@ class _ClockGameState extends State<ClockGame> {
             incorrectResponseTimes.length
         : 0.0;
 
-    // Store session data with DateTime as the key
+    // Store session data with DateTime as the key in Hive
     await _myClockGame.put(
-      sessionStartTime.toString(), // Use DateTime as a unique key
+      sessionStartTime.toString(),
       {
         'gameName': 'clockGame',
         'sessionDuration': sessionDuration.inSeconds,
@@ -160,6 +163,26 @@ class _ClockGameState extends State<ClockGame> {
         'avgIncorrectResponseTime': averageIncorrectResponseTime,
       },
     );
+
+    // Store session data in Supabase
+    final userId = _userBox.get('id');
+    final userName = _userBox.get('name');
+
+    final response = await supabase.from('GameMetrics').insert({
+      'uuid': userId,
+      'userName': userName,
+      'gameName': 'clockGame',
+      'sessionDuration': sessionDuration.inSeconds,
+      'accuracy': accuracy,
+      'avgCorrectResponseTime': averageCorrectResponseTime,
+      'avgIncorrectResponseTime': averageIncorrectResponseTime,
+    });
+
+    if (response.error != null) {
+      log('Error storing data in Supabase: ${response.error!.message}');
+    } else {
+      log('Data stored successfully in Supabase');
+    }
 
     printStoredValues();
 
