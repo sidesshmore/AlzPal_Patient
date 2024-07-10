@@ -73,7 +73,6 @@ class _FlashCardState extends State<FlashCard> {
     await _myFlashCard.put(
       sessionStartTime.toString(), // Use DateTime as a unique key
       {
-        'gameName': 'flashCard',
         'sessionDuration': sessionDuration.inSeconds,
         'accuracy': accuracy,
         'avgCorrectResponseTime': averageCorrectResponseTime,
