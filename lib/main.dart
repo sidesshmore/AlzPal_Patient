@@ -7,17 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'colors.dart';
 import 'package:hive/hive.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-
-Future<void> main() async {
+void main() async {
   await Hive.initFlutter();
-  await Supabase.initialize(
-    url: 'https://vvcsklvghuwnldwgmine.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2Y3NrbHZnaHV3bmxkd2dtaW5lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA1NDM4NDQsImV4cCI6MjAzNjExOTg0NH0.cL0NpYDn21cH-YdDR6VPLNMsot4LRBKZX79qZvRryCE',
-  );
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -38,7 +32,7 @@ class MyApp extends StatelessWidget {
     final user = Hive.box('user');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'LATEST VERSION - 9/7/24',
+      title: 'Flutter Demo',
       theme: ThemeData(
           scaffoldBackgroundColor: MainBackgroundColor,
           appBarTheme: const AppBarTheme(backgroundColor: MainBackgroundColor)),
