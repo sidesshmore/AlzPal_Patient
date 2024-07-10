@@ -153,6 +153,7 @@ class _ClockGameState extends State<ClockGame> {
     await _myClockGame.put(
       sessionStartTime.toString(), // Use DateTime as a unique key
       {
+        'gameName': 'clockGame',
         'sessionDuration': sessionDuration.inSeconds,
         'accuracy': accuracy,
         'avgCorrectResponseTime': averageCorrectResponseTime,
