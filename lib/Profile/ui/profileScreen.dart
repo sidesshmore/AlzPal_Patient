@@ -127,6 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     log(screenHeight.toString());
     log(screenWidth.toString());
+    log(user.get('id'));
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,

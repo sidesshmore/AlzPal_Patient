@@ -82,6 +82,24 @@ class _NameScreenState extends State<NameScreen> {
                   // Save to Hive
                   await user.put('name', userName);
                   await user.put('id', userId);
+
+                  try {
+                    // Save to Supabase
+                    final response = await supabase
+                        .from('UserTable')
+                        .insert({'id': userId, 'name': userName});
+
+                    if (response.error == null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()));
+                    } else {
+                      log('Error inserting user: ${response.error!.message}');
+                    }
+                  } catch (e) {
+                    log('Exception: $e');
+                  }
                 },
                 child: Container(
                   width: screenWidth * 0.71,
