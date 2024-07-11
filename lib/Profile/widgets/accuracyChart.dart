@@ -75,13 +75,13 @@ class _AccuracyChartState extends State<AccuracyChart> {
             child: SfCartesianChart(
               tooltipBehavior: _tooltipBehavior,
               plotAreaBorderWidth: 0,
-              primaryXAxis: CategoryAxis(
+              primaryXAxis: const CategoryAxis(
                 majorGridLines: MajorGridLines(width: 0),
                 //Hide the axis line of x-axis
 
                 labelStyle: TextStyle(color: Colors.transparent),
               ),
-              primaryYAxis: CategoryAxis(
+              primaryYAxis: const CategoryAxis(
                 majorGridLines: MajorGridLines(width: 0),
                 //Hide the axis line of x-axis
               ),
