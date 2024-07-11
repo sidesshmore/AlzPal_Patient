@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,6 @@ class _NameScreenState extends State<NameScreen> {
             child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: screenHeight * 0.045),
               Row(
@@ -81,16 +82,6 @@ class _NameScreenState extends State<NameScreen> {
                   // Save to Hive
                   await user.put('name', userName);
                   await user.put('id', userId);
-
-                  // Save to Supabase
-                  final response = await supabase
-                      .from('UserTable')
-                      .insert({'id': userId, 'name': userName});
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
                 },
                 child: Container(
                   width: screenWidth * 0.71,
