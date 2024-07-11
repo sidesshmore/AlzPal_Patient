@@ -22,18 +22,19 @@ class _SessionchartState extends State<Sessionchart> {
       enable: true,
       borderWidth: 5,
       color: Colors.white,
-      textStyle: TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: GreenColor, fontWeight: FontWeight.bold),
       builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
           int seriesIndex) {
         return Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.75),
             borderRadius: BorderRadius.circular(4.0),
           ),
           child: Text(
             '${data.y.toString().split('.').first}',
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         );
       },
@@ -81,7 +82,7 @@ class _SessionchartState extends State<Sessionchart> {
                         height: 10,
                         color: Colors.blue,
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text(
                         'Session Time',
                         style: TextStyle(

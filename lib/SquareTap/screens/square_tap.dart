@@ -7,6 +7,7 @@ import 'package:alzpal_patient/SquareTap/widgets/square_container.dart';
 import 'package:alzpal_patient/SquareTap/widgets/square_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -46,6 +47,9 @@ class _SquareTapState extends State<SquareTap> {
   int currentColorIndex = 0;
 
   void changeColor() {
+    HapticFeedback.lightImpact();
+    Haptics.vibrate(HapticsType.success);
+    Haptics.vibrate(HapticsType.medium);
     setState(() {
       currentColorIndex = (currentColorIndex + 1) % colors.length;
     });
@@ -125,6 +129,8 @@ class _SquareTapState extends State<SquareTap> {
       // Proceed to next question or finish game logic here
       if (correct) {
         HapticFeedback.lightImpact();
+        Haptics.vibrate(HapticsType.success);
+        Haptics.vibrate(HapticsType.medium);
         Future.delayed(Duration(seconds: 1), () {
           if (colorIndex == shuffledColor.length - 1) {
             Navigator.push(
@@ -144,6 +150,8 @@ class _SquareTapState extends State<SquareTap> {
         });
       } else {
         HapticFeedback.heavyImpact();
+        Haptics.vibrate(HapticsType.error);
+        Haptics.vibrate(HapticsType.heavy);
         Future.delayed(Duration(seconds: 1), () {
           setState(() {
             isSelected = false;

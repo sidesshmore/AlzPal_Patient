@@ -9,6 +9,7 @@ import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -94,6 +95,8 @@ class _ClockGameState extends State<ClockGame> {
 
       if (isCorrect) {
         HapticFeedback.lightImpact();
+        Haptics.vibrate(HapticsType.success);
+        Haptics.vibrate(HapticsType.medium);
         Future.delayed(Duration(seconds: 1), () {
           if (shuffledQuestions.length - 1 == questionIndex) {
             Navigator.push(
@@ -113,6 +116,8 @@ class _ClockGameState extends State<ClockGame> {
         });
       } else {
         HapticFeedback.heavyImpact();
+        Haptics.vibrate(HapticsType.error);
+        Haptics.vibrate(HapticsType.heavy);
         showPopUp(context).then((_) {
           setState(() {
             selectedOption = '';

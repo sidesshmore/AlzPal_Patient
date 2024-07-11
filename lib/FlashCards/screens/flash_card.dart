@@ -12,6 +12,7 @@ import 'package:alzpal_patient/FlashCards/widget/flashcard_question.dart';
 import 'package:alzpal_patient/FlashCards/widget/wrong_popup.dart';
 import 'package:alzpal_patient/Home/screen/home_screen.dart';
 import 'package:alzpal_patient/colors.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -193,7 +194,8 @@ class _FlashCardState extends State<FlashCard> {
 
         if (isCorrect) {
           HapticFeedback.lightImpact();
-
+          Haptics.vibrate(HapticsType.success);
+          Haptics.vibrate(HapticsType.medium);
           if (questionArray == 0 && questionIndex == animalLen - 1) {
             Navigator.push(
               context,
@@ -226,6 +228,8 @@ class _FlashCardState extends State<FlashCard> {
           }
         } else {
           HapticFeedback.heavyImpact();
+          Haptics.vibrate(HapticsType.error);
+          Haptics.vibrate(HapticsType.heavy);
           showPopUp(context).then((_) {
             setState(() {
               selectedOption = '';
