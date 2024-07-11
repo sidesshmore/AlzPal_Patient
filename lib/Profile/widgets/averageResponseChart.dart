@@ -48,7 +48,7 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
     final List<AverageResponseChartModel> chartData = widget.chartData;
 
     return Container(
-      height: screenHeight * 0.34,
+      height: screenHeight * 0.4,
       width: screenWidth * 0.91,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(33), color: DarkBlack),
@@ -68,7 +68,7 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
             ),
           ),
           Container(
-              height: screenHeight * 0.2,
+              height: screenHeight * 0.25,
               child: SfCartesianChart(
                   legend: Legend(
                     isVisible: true,
@@ -95,7 +95,7 @@ class _AverageResponseChartState extends State<AverageResponseChart> {
                             text,
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: screenWidth * 0.03),
+                                fontSize: screenWidth * 0.033),
                           ),
                         ],
                       );
