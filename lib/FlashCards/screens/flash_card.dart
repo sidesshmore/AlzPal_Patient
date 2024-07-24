@@ -84,6 +84,9 @@ class _FlashCardState extends State<FlashCard> {
       },
     );
 
+    String date = sessionStartTime.toIso8601String().split('T').first;
+    String time = sessionStartTime.toIso8601String().split('T').last;
+
     // Store session data in Supabase
     final userId = _userBox.get('id');
     final userName = _userBox.get('name');
@@ -95,6 +98,8 @@ class _FlashCardState extends State<FlashCard> {
       'accuracy': accuracy,
       'avgCorrectResponseTime': averageCorrectResponseTime,
       'avgIncorrectResponseTime': averageIncorrectResponseTime,
+      'date': date,
+      'time': time,
     });
 
     if (response.error != null) {

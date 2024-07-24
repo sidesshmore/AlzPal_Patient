@@ -77,15 +77,16 @@ class _NameScreenState extends State<NameScreen> {
                 onTap: () async {
                   final userName = _namecontroller.text;
                   final userId = uuid.v4();
+                  final createdAt =
+                      DateTime.now().toIso8601String(); // Current date and time
 
                   // Save to Hive
                   await user.put('name', userName);
                   await user.put('id', userId);
 
                   // Save to Supabase
-                  final response = await supabase
-                      .from('UserTable')
-                      .insert({'id': userId, 'name': userName});
+                  final response = await supabase.from('UserTable').insert(
+                      {'id': userId, 'name': userName, 'createdAt': createdAt});
 
                   Navigator.push(
                       context,
